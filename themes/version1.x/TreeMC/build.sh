@@ -134,15 +134,16 @@ print "Installing dependencies..."
 
 if node -v &>/dev/null; then
     print "The dependencies are already installed, skipping this step..."
-  else
+else
     case "$OS" in
-      debian | ubuntu)
-        curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash - && apt-get install -y nodejs
-      ;;
-      centos)
-        [ "$OS_VER_MAJOR" == "7" ] && curl -sL https://rpm.nodesource.com/setup_14.x | sudo -E bash - && sudo yum install -y nodejs yarn
-        [ "$OS_VER_MAJOR" == "8" ] && curl -sL https://rpm.nodesource.com/setup_14.x | sudo -E bash - && sudo dnf install -y nodejs
-      ;;
+        debian|ubuntu)
+            curl -fsSL https://deb.nodesource.com/setup_22.x | bash -
+            apt-get install -y nodejs
+        ;;
+        centos)
+            curl -fsSL https://rpm.nodesource.com/setup_22.x | bash -
+            yum install -y nodejs
+        ;;
     esac
 fi
 }
@@ -182,8 +183,8 @@ rm -rf $PTERO/temp
 
 # Configure #
 configure() {
+grep -q "import './user.css';" "$PTERO/resources/scripts/index.tsx" || \
 sed -i "5a\import './user.css';" "$PTERO/resources/scripts/index.tsx"
-sed -i "32a\{!! Theme::css('css/admin.css?t={cache-version}') !!}" "$PTERO/resources/views/layouts/admin.blade.php"
 }
 
 # Panel Production #
@@ -191,15 +192,19 @@ production() {
 print "Producing panel..."
 print_warning "This process takes a few minutes, please do not cancel it."
 
-if [ -d "$PTERO/node_modules" ]; then
-    yarn --cwd $PTERO add @emotion/react
-    yarn --cwd $PTERO build:production
-  else
-    npm i -g yarn
-    yarn --cwd $PTERO install
-    yarn --cwd $PTERO add @emotion/react
-    yarn --cwd $PTERO build:production
-fi
+cd $PTERO
+
+npm install -g yarn
+
+yarn install
+
+yarn add @emotion/react
+
+yarn build:production
+
+php artisan optimize:clear
+
+systemctl restart nginx
 }
 
 bye() {
