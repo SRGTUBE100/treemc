@@ -12,7 +12,7 @@ fontSize: '18px',
 >
 Welcome back 👋 </p>
 
-```
+
             <h1
                 style={{
                     color: '#FFFFFF',
@@ -35,6 +35,6 @@ Welcome back 👋 </p>
         </div>
     </GlassCard>
 );
-```
+
 
 };
