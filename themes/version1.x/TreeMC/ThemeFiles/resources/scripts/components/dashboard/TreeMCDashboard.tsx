@@ -4,7 +4,20 @@ import TreeMCLayout from '../treemc/TreeMCLayout';
 import TreeMCHero from './TreeMCHero';
 import TreeMCStats from './TreeMCStats';
 
-export default () => {
-return ( <TreeMCLayout> <TreeMCHero /> <TreeMCStats /> </TreeMCLayout>
-);
+interface Props {
+    serverCount: number;
+    children?: React.ReactNode;
+}
+
+export default ({ serverCount, children }: Props) => {
+    return (
+        <TreeMCLayout>
+            <TreeMCHero />
+            <TreeMCStats serverCount={serverCount} />
+
+            <div style={{ marginTop: '30px' }}>
+                {children}
+            </div>
+        </TreeMCLayout>
+    );
 };
