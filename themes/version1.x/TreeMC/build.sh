@@ -130,21 +130,16 @@ print "Compatibility check skipped for TreeMC Theme."
 
 # Install Dependencies #
 dependencies() {
-print "Installing dependencies..."
+print "Checking dependencies..."
 
-if node -v &>/dev/null; then
-    print "The dependencies are already installed, skipping this step..."
-else
-    case "$OS" in
-        debian|ubuntu)
-            curl -fsSL https://deb.nodesource.com/setup_22.x | bash -
-            apt-get install -y nodejs
-        ;;
-        centos)
-            curl -fsSL https://rpm.nodesource.com/setup_22.x | bash -
-            yum install -y nodejs
-        ;;
-    esac
+if ! command -v node >/dev/null 2>&1; then
+    print "Installing Node.js 22..."
+    curl -fsSL https://deb.nodesource.com/setup_22.x | bash -
+    apt-get install -y nodejs
+fi
+
+if ! command -v yarn >/dev/null 2>&1; then
+    npm install -g yarn
 fi
 }
 
