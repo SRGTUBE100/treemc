@@ -12,7 +12,7 @@ return ( <GlassCard>
 <h3 style={{ color: '#9CA3AF', fontSize: '14px' }}>
 {title} </h3>
 
-```
+
         <h1
             style={{
                 color: '#FFFFFF',
@@ -36,6 +36,6 @@ return ( <GlassCard>
         )}
     </GlassCard>
 );
-```
+
 
 };
